@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вопрос {{ question_num }} из {{ total_questions }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .answer-block {
+            display: block;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .answer-block:hover {
+            background-color: #f0f0f0;
+        }
+        .correct {
+            border-color: green;
+            background-color: #e0ffe0;
+        }
+        .incorrect {
+            border-color: red;
+            background-color: #ffe0e0;
+        }
+        .disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Вопрос {{ question_num }} из {{ total_questions }}</h2>
+    <p><strong>{{ question['question'] }}</strong></p>
+
+    <form id="answerForm" method="post" action="{{ url_for('submit_answer') }}">
+        {% for answer in question['answers'] %}
+            <label class="answer-block" onclick="selectAnswer({{ loop.index0 }}, this)">
+                <input type="radio" name="answer" value="{{ loop.index0 }}" style="display:none;">
+                {{ answer['text'] }}
+            </label>
+        {% endfor %}
+        <button type="submit" id="nextBtn" class="btn btn-primary" style="display:none;">Следующий</button>
+    </form>
+</div>
+
+<script>
+    let form = document.getElementById('answerForm');
+    let selected = false;
+
+    function selectAnswer(index, element) {
+        if (selected) return;
+        selected = true;
+
+        const answers = {{ question['answers']|tojson }};
+        const isCorrect = answers[index]['is_correct'];
+
+        let labels = document.querySelectorAll('.answer-block');
+        labels.forEach((label, i) => {
+            label.classList.add('disabled');
+            if (answers[i]['is_correct']) {
+                label.classList.add('correct');
+            } else if (i === index && !answers[i]['is_correct']) {
+                label.classList.add('incorrect');
+            }
+        });
+
+        // Автоматическая установка radio
+        document.querySelector(`input[name="answer"][value="${index}"]`).checked = true;
+
+        // Показать кнопку
+        document.getElementById('nextBtn').style.display = 'block';
+    }
+</script>
+</body>
+</html>

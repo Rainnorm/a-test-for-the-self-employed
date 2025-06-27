@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты теста</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Результаты теста</h1>
+        
+        <div class="result-summary">
+            <h2>Ваш результат: {{ score }} из {{ total_questions }}</h2>
+            <p>Процент правильных ответов: {{ (score / total_questions * 100)|round(2) }}%</p>
+        </div>
+        
+        <div class="detailed-results">
+            <h3>Подробные результаты:</h3>
+            {% for answer in user_answers %}
+            <div class="question-result {% if answer.is_correct %}correct{% else %}incorrect{% endif %}">
+                <h4>Вопрос {{ loop.index }}:</h4>
+                <p>{{ answer.question }}</p>
+                
+                <div class="user-answer">
+                    <strong>Ваш ответ:</strong>
+                    <p>
+                        {% if answer.selected_answer == -1 %}
+                        Вы не выбрали ответ
+                        {% else %}
+                        {{ answer.selected_answer + 1 }}. {{ user_answers[loop.index0].question.answers[answer.selected_answer].text }}
+                        {% endif %}
+                    </p>
+                </div>
+                
+                {% if not answer.is_correct %}
+                <div class="correct-answer">
+                    <strong>Правильный ответ:</strong>
+                        <p>Процент правильных ответов: 
+                            {% if total_questions > 0 %}
+                                {{ (score / total_questions * 100)|round(2) }}%
+                            {% else %}
+                                0%
+                            {% endif %}
+                        </p>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <a href="{{ url_for('index') }}" class="btn btn-primary">Пройти тест снова</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест по предпринимательству</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Тест по предпринимательству</h1>
+        <p>Проверьте свои знания в области предпринимательства!</p>
+        
+        <form action="{{ url_for('start_test') }}" method="post">
+            <div class="form-group">
+                <label for="num_questions">Количество вопросов:</label>
+                <select name="num_questions" id="num_questions" class="form-control">
+                    <option value="10">10 вопросов</option>
+                    <option value="20" selected>20 вопросов</option>
+                    <option value="50">50 вопросов</option>
+                    <option value="100">100 вопросов</option>
+                    <option value="370">Все вопросы ({{ 370 }})</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Начать тест</button>
+        </form>
+    </div>
+</body>
+</html>
