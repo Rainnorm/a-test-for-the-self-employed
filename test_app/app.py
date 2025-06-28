@@ -11,7 +11,7 @@ app.secret_key = os.urandom(24)  # Секретный ключ для подпи
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = './flask_session'
 app.config['SESSION_PERMANENT'] = False
-app.config['PERMANENT_SESSION_LIFETIME'] = 3600  # 1 час
+app.config['PERMANENT_SESSION_LIFETIME'] = 7200  # 2 часа
 
 Session(app)
 
